@@ -1,0 +1,15 @@
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": { "*": ["types/*"] },
+    "target": "es6",
+    "module": "commonjs",
+    "noUnusedLocals": true,
+    "resolveJsonModule": true,
+    "noImplicitAny": false,
+    "sourceMap": true
+  },
+  "exclude": [
+    "node_modules"
+  ]
+}

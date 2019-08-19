@@ -1,0 +1,15 @@
+{
+  "extends": [
+    "tslint:recommended"
+  ],
+  "rules": {
+    "indent": [true, "spaces", 2],
+    "quotemark": {
+      "options": [
+        "single",
+        "avoid-escape"
+      ]
+    },
+    "no-console": false
+  }
+}

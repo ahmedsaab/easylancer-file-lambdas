@@ -1,0 +1,39 @@
+{
+  "private": true,
+  "name": "easylancer-file-lambdas",
+  "description": "lambda functions that together serves as the files micro-service",
+  "version": "1.0.0",
+  "scripts": {
+    "deploy": ". ./set_local_secrets.sh && sls deploy -v",
+    "lint": "eslint .",
+    "start": ". ./set_local_secrets.sh && sls offline start --useSeparateProcesses "
+  },
+  "devDependencies": {
+    "aws-sdk": "2.223.1",
+    "babel-core": "6.26.0",
+    "babel-loader": "7.1.4",
+    "babel-preset-env": "1.6.1",
+    "eslint": "4.19.1",
+    "eslint-config-airbnb-base": "12.1.0",
+    "eslint-plugin-import": "2.10.0",
+    "serverless": "1.50",
+    "serverless-offline": "^5.10.1",
+    "serverless-plugin-typescript": "^1.1.5",
+    "serverless-webpack": "^5.3.1",
+    "webpack": "4.5.0"
+  },
+  "author": "Ahmed Saleh <ahmed.saab.dev@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "@types/http-errors": "^1.6.2",
+    "@types/joi": "^14.3.3",
+    "@types/mongodb": "^3.2.3",
+    "dotenv": "^8.0.0",
+    "http-errors": "^1.7.3",
+    "joi": "^14.3.1",
+    "moment": "^2.24.0",
+    "mongodb": "^3.3.0",
+    "serverless-offline-scheduler": "^0.3.8",
+    "typescript": "^3.5.3"
+  }
+}

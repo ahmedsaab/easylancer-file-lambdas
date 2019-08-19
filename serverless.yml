@@ -1,0 +1,70 @@
+org: ahmedsaab
+app: easylancer
+service: file-lambdas
+
+plugins:
+  - serverless-plugin-typescript
+  - serverless-offline
+  - serverless-offline-scheduler
+
+custom:
+  webpack:
+    webpackConfig: 'webpack.config.js'
+    includeModules: true
+    packager: 'yarn'
+  serverless-offline:
+    port: 4000
+
+provider:
+  name: aws
+  runtime: nodejs8.10
+  stage: ${env:AWS_STAGE}
+  region: ${env:AWS_REGION}
+  environment:
+    MONGO_DB_URI: ${env:MONGO_DB_URI}
+    MONGO_DB_NAME: ${env:MONGO_DB_NAME}
+    AWS_BUCKET: ${env:AWS_BUCKET}
+    TTL: ${env:TTL}
+  deploymentBucket:
+    name: server-less-deployments
+  versionFunctions: false
+  iamRoleStatements:
+  -  Effect: "Allow"
+     Action:
+       - "s3:*"
+     Resource: "*"
+
+functions:
+  request-file:
+    handler: src/functions/request-file.default
+    name: ${self:service}-request-file-${self:provider.stage}
+    memorySize: 128
+    events:
+      - http:
+          path: request-file
+          method: GET
+          cors: true
+  update-files:
+    handler: src/functions/update-files.default
+    name: ${self:service}-update-files-${self:provider.stage}
+    memorySize: 128
+    events:
+      - http:
+          path: update-files
+          method: POST
+          cors: true
+  on-upload:
+    handler: src/functions/on-upload.default
+    events:
+      - s3:
+          bucket: ${env:AWS_BUCKET}
+          event: s3:ObjectCreated:*
+          existing: true
+  clean-files:
+    handler: src/functions/clean-files.default
+    events:
+#      - schedule: rate(1 hour)
+      - http:
+          path: clean-files
+          method: GET
+          cors: true
