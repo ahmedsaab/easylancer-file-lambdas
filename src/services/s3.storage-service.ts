@@ -1,4 +1,4 @@
-import  {IStorageService, IPostSignedUpload, IDeleteFilesResponse } from "./interfaces/storage-service";
+import { IStorageService, IPostSignedUpload, IDeleteFilesResponse } from "./interfaces/storage-service";
 import { PresignedPost } from "aws-sdk/lib/s3/presigned_post";
 import config from "../config";
 import * as AWS from "aws-sdk";

@@ -8,7 +8,8 @@ import config from "../config";
 export default async (event) => {
   try {
     const { urls, confirm } = JSON.parse(event.body.toString());
-    const expiresAt = confirm ? null : moment().add(config.TTL, 'minutes').toISOString();
+    const expiresAt = confirm ? null
+      : moment().add(config.TTL, 'minutes').toISOString();
 
     const filesCount = await Indexer.update({
       url: new oneOf(urls),
