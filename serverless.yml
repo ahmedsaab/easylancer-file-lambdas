@@ -24,6 +24,7 @@ provider:
     MONGO_DB_URI: ${env:MONGO_DB_URI}
     MONGO_DB_NAME: ${env:MONGO_DB_NAME}
     AWS_BUCKET: ${env:AWS_BUCKET}
+    ISSUER_URL: ${env:ISSUER_URL}
     TTL: ${env:TTL}
   deploymentBucket:
     name: server-less-deployments
@@ -35,6 +36,8 @@ provider:
      Resource: "*"
 
 functions:
+  auth:
+    handler: src/functions/auth.default
   request-file:
     handler: src/functions/request-file.default
     name: ${self:service}-request-file-${self:provider.stage}
@@ -43,7 +46,16 @@ functions:
       - http:
           path: request-file
           method: GET
-          cors: true
+          authorizer: auth
+          cors:
+            origins:
+              - '*'
+            headers:
+              - Content-Type
+              - X-Amz-Date
+              - Authorization
+              - X-Api-Key
+              - X-Amz-Security-Token
   update-files:
     handler: src/functions/update-files.default
     name: ${self:service}-update-files-${self:provider.stage}

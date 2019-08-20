@@ -5,4 +5,5 @@ export AWS_STAGE=
 export AWS_REGION=
 export AWS_ACCESS_KEY_ID=
 export AWS_SECRET_ACCESS_KEY=
+export ISSUER_URL=
 export TTL=
