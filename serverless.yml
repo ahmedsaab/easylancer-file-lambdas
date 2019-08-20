@@ -75,7 +75,7 @@ functions:
   clean-files:
     handler: src/functions/clean-files.default
     events:
-#      - schedule: rate(1 hour)
+      - schedule: rate(1 week)
       - http:
           path: clean-files
           method: GET
