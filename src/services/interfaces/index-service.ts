@@ -39,9 +39,9 @@ export interface Index {
 }
 
 export default interface IIndexService {
-  createIndex(userId: UserId, expiresAt: string): Promise<string>;
-  queryIndex(selector: object): Promise<Array<object>>;
-  updateIndex(id: IndexId, updates: Partial<Index>);
-  updateIndexes(selector: object, updates: Partial<Index>): Promise<number>;
-  deleteIndexes(selector: object): Promise<number>;
+  create(userId: UserId, expiresAt: string): Promise<string>;
+  query(selector: object): Promise<Array<object>>;
+  updateById(id: IndexId, updates: Partial<Index>);
+  update(selector: object, updates: Partial<Index>): Promise<number>;
+  delete(selector: object): Promise<number>;
 }

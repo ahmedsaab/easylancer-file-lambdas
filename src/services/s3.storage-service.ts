@@ -30,7 +30,7 @@ class S3StorageService implements IStorageService {
     return { upload, download}
   };
 
-  async deleteFiles(keys: Array<string>): Promise<IDeleteFilesResponse> {
+  async delete(keys: Array<string>): Promise<IDeleteFilesResponse> {
     if (keys.length) {
       return S3.deleteObjects(Object.assign(params, {
         Delete: {

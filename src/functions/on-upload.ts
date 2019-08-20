@@ -1,4 +1,4 @@
-import MongodbIndexService from "../services/mongodb.index-service";
+import Indexer from "../services/mongodb.index-service";
 
 export default async (event) => {
   const updates = event.Records.map((record) => {
@@ -6,7 +6,7 @@ export default async (event) => {
     const fileSize = record.s3.object.size;
     const indexId = filePath.split('/')[1];
 
-    return MongodbIndexService.updateIndex(indexId,{
+    return Indexer.updateById(indexId,{
       fileSize,
       uploaded: true
     });

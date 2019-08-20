@@ -42,7 +42,7 @@ export class MongodbIndexService implements IIndexService {
     return query;
   }
 
-  async createIndex(userId: UserId, expiresAt: string): Promise<IndexId> {
+  async create(userId: UserId, expiresAt: string): Promise<IndexId> {
     await this.connect();
 
     const index: Partial<Index> = {
@@ -60,7 +60,7 @@ export class MongodbIndexService implements IIndexService {
       );
   }
 
-  async updateIndex(id: IndexId, updates: Partial<Index>) {
+  async updateById(id: IndexId, updates: Partial<Index>) {
     await this.connect();
 
     return this.db.collection(this.collection).updateOne(
@@ -69,7 +69,7 @@ export class MongodbIndexService implements IIndexService {
     );
   }
 
-  async updateIndexes(selector: Selector, updates: Partial<Index>): Promise<number> {
+  async update(selector: Selector, updates: Partial<Index>): Promise<number> {
     await this.connect();
 
     return this.db.collection(this.collection).updateMany(
@@ -78,7 +78,7 @@ export class MongodbIndexService implements IIndexService {
     ).then((output: UpdateWriteOpResult) => output.matchedCount);
   }
 
-  async queryIndex(selector: Selector): Promise<Array<Index>> {
+  async query(selector: Selector): Promise<Array<Index>> {
     await this.connect();
 
     return this.db.collection(this.collection)
@@ -91,7 +91,7 @@ export class MongodbIndexService implements IIndexService {
       })));
   }
 
-  async deleteIndexes(selector: Selector): Promise<number> {
+  async delete(selector: Selector): Promise<number> {
     await this.connect();
 
     return this.db.collection(this.collection).deleteMany(this.getQuery(selector))

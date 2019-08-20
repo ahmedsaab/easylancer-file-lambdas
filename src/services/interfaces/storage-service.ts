@@ -15,5 +15,5 @@ export interface IDeleteFilesResponse {
 
 export interface IStorageService {
   requestSignedPost(string): Promise<IPostSignedUpload>;
-  deleteFiles(filePaths): Promise<IDeleteFilesResponse>;
+  delete(filePaths): Promise<IDeleteFilesResponse>;
 }
