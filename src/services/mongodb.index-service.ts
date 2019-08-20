@@ -1,12 +1,24 @@
-import IIndexService, {Index, IndexId, isDefined, lessThan, oneOf, Selector, UserId} from "./interfaces/index-service";
-import { connect } from "../db";
-import { FilterQuery, InsertOneWriteOpResult, ObjectID, UpdateWriteOpResult } from "mongodb";
+import IIndexService, { Index, IndexId, isDefined, lessThan, oneOf, Selector, UserId } from "./interfaces/index-service";
+import { Db, FilterQuery, InsertOneWriteOpResult, MongoClient, ObjectID, UpdateWriteOpResult } from "mongodb";
+import config from "../config";
 
 export class MongodbIndexService implements IIndexService {
   private collection: string;
+  private db: Db = null;
 
   constructor(collectionName: string) {
     this.collection = collectionName;
+  }
+
+  private async connect(): Promise<Db> {
+    if (this.db) {
+      return this.db;
+    }
+    const connection = await MongoClient.connect(config.MONGO_DB_URI, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true
+    });
+    this.db = connection.db(config.MONGO_DB_NAME);
   }
 
   private getQuery(selector: Selector): FilterQuery<object> {
@@ -31,7 +43,8 @@ export class MongodbIndexService implements IIndexService {
   }
 
   async createIndex(userId: UserId, expiresAt: string): Promise<IndexId> {
-    const db = await connect();
+    await this.connect();
+
     const index: Partial<Index> = {
       userId,
       url: null,
@@ -40,7 +53,7 @@ export class MongodbIndexService implements IIndexService {
       expiresAt,
     };
 
-    return db.collection(this.collection)
+    return this.db.collection(this.collection)
       .insertOne(index)
       .then((output: InsertOneWriteOpResult) =>
         output.insertedId.toHexString()
@@ -48,27 +61,27 @@ export class MongodbIndexService implements IIndexService {
   }
 
   async updateIndex(id: IndexId, updates: Partial<Index>) {
-    const db = await connect();
+    await this.connect();
 
-    return db.collection(this.collection).updateOne(
+    return this.db.collection(this.collection).updateOne(
       { _id: new ObjectID(id) },
       { $set: updates }
     );
   }
 
   async updateIndexes(selector: Selector, updates: Partial<Index>): Promise<number> {
-    const db = await connect();
+    await this.connect();
 
-    return db.collection(this.collection).updateMany(
+    return this.db.collection(this.collection).updateMany(
       this.getQuery(selector),
       { $set: updates },
     ).then((output: UpdateWriteOpResult) => output.matchedCount);
   }
 
   async queryIndex(selector: Selector): Promise<Array<Index>> {
-    const db = await connect();
+    await this.connect();
 
-    return db.collection(this.collection)
+    return this.db.collection(this.collection)
       .find(this.getQuery(selector))
       .toArray()
       .then((files) => files.map(file => ({
@@ -79,9 +92,9 @@ export class MongodbIndexService implements IIndexService {
   }
 
   async deleteIndexes(selector: Selector): Promise<number> {
-    const db = await connect();
+    await this.connect();
 
-    return db.collection(this.collection).deleteMany(this.getQuery(selector))
+    return this.db.collection(this.collection).deleteMany(this.getQuery(selector))
       .then(({ deletedCount }) => deletedCount);
   }
 }
