@@ -1,6 +1,6 @@
 import * as moment from 'moment';
 import Indexer from "../services/mongodb.index-service";
-import S3Storage from '../services/s3.storage-service'
+import Storage from '../services/s3.storage-service'
 import { lessThan, oneOf } from "../services/interfaces/index-service";
 
 export default async () => {
@@ -11,7 +11,7 @@ export default async () => {
       expiresAt: new lessThan(now),
     });
 
-    const storageDeleteResp = await S3Storage.delete(
+    const storageDeleteResp = await Storage.delete(
       expiredFiles
         .filter(file => file.uploaded)
         .map(file => file.key)

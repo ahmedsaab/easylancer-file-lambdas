@@ -1,4 +1,4 @@
-import S3Storage from '../services/s3.storage-service'
+import Storage from '../services/s3.storage-service'
 import Indexer from '../services/mongodb.index-service'
 import { generateErrorResponse, generateSuccessResponse } from "../http/http-response-factory";
 import config from "../config";
@@ -10,7 +10,7 @@ export default async (event) => {
     const expiresAt = moment().add(config.TTL, 'minutes').toISOString();
     const indexId = await Indexer.create(userId, expiresAt);
     const filePath = `${userId}/${indexId}`;
-    const resp = await S3Storage.requestSignedPost(filePath);
+    const resp = await Storage.requestSignedPost(filePath);
 
     await Indexer.updateById(indexId,{
       url: resp.download.url,
