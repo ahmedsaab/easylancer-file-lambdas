@@ -9,7 +9,7 @@
     "start": ". ./set_local_secrets.sh && sls offline start --useSeparateProcesses --dontPrintOutput"
   },
   "devDependencies": {
-    "aws-sdk": "2.223.1",
+    "aws-sdk": "2.814.0",
     "babel-core": "6.26.0",
     "babel-loader": "7.1.4",
     "babel-preset-env": "1.6.1",
